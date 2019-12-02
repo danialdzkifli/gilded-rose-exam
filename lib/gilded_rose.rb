@@ -1,3 +1,5 @@
+require_relative 'item'
+
 class GildedRose
   def initialize(items)
     @items = items
@@ -55,3 +57,13 @@ class GildedRose
     end
   end
 end
+
+aged_brie = Item.new("Aged Brie", 5, 10)
+conjured = Item.new("Conjured", 10, 10)
+backstage_pass = Item.new("Backstage passes to a TAFKAL80ETC concert", 10, 10)
+sulfuras = Item.new("Sulfuras, Hand of Ragnaros", 0, 80)
+item = [aged_brie, conjured, backstage_pass, sulfuras]
+output = GildedRose.new(item)
+puts output.update_quality
+
+
