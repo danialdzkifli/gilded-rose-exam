@@ -7,63 +7,50 @@ class GildedRose
 
   def update_quality
     @items.each do |item|
-      if item.name != "Aged Brie" && item.name != "Backstage passes to a TAFKAL80ETC concert"
-        if item.quality > 0
-          if item.name != "Sulfuras, Hand of Ragnaros"
-            if item.name != "Conjured"
-              item.quality = item.quality - 1
-            else
-              item.quality = item.quality - 2
+      if item.quality <= 50 && item.quality >= 0
+        if item.sell_in > 0  
+          case item.name
+          when "Aged Brie"
+            item.quality = item.quality + 1
+          when "Sulfuras, Hand of Ragnaros"
+            item.sell_in = nil
+            item.quality = 80
+          when "Backstage passes to a TAFKAL80ETC concert"
+            case item.sell_in
+            when 6 .. 10
+              item.quality = item.quality + 2
+            when 1 .. 5 
+              item.quality = item.quality + 3
+            when 0
+              item.quality = 0
+            else 
+              item.quality = item.quality + 1
             end
+          when "Conjured"
+            item.quality = item.quality - 2
+          else
+            item.quality = item.quality - 1
           end
-        end
-      else
-        if item.quality < 50
-          item.quality = item.quality + 1
-          if item.name == "Backstage passes to a TAFKAL80ETC concert"
-            if item.sell_in < 11
-              if item.quality < 50
-                item.quality = item.quality + 1
-              end
-            end
-            if item.sell_in < 6
-              if item.quality < 50
-                item.quality = item.quality + 1
-              end
-            end
+        else
+          if item.name == "Conjured"
+            item.quality = item.quality - 4
+          else
+            item.quality = item.quality - 2
           end
-        end
+        end 
       end
       if item.name != "Sulfuras, Hand of Ragnaros"
         item.sell_in = item.sell_in - 1
-      end
-      if item.sell_in < 0
-        if item.name != "Aged Brie"
-          if item.name != "Backstage passes to a TAFKAL80ETC concert"
-            if item.quality > 0
-              if item.name != "Sulfuras, Hand of Ragnaros"
-                item.quality = item.quality - 1
-              end
-            end
-          else
-            item.quality = item.quality - item.quality
-          end
-        else
-          if item.quality < 50
-            item.quality = item.quality + 1
-          end
-        end
       end
     end
   end
 end
 
+normal = Item.new("Normal", 5, 10)
 aged_brie = Item.new("Aged Brie", 5, 10)
 conjured = Item.new("Conjured", 10, 10)
-backstage_pass = Item.new("Backstage passes to a TAFKAL80ETC concert", 10, 10)
+backstage_pass = Item.new("Backstage passes to a TAFKAL80ETC concert", 2, 10)
 sulfuras = Item.new("Sulfuras, Hand of Ragnaros", 0, 80)
-item = [aged_brie, conjured, backstage_pass, sulfuras]
+item = [normal,aged_brie, conjured, backstage_pass, sulfuras]
 output = GildedRose.new(item)
 puts output.update_quality
-
-
